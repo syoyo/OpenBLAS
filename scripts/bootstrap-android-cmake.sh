@@ -9,11 +9,15 @@ CMAKE_BIN=$ANDROID_SDK_ROOT/cmake/3.10.2.4988404/bin/cmake
 # For ninja build
 # -DCMAKE_MAKE_PROGRAM=$ANDROID_SDK_ROOT/cmake/3.6.4111459/bin/ninja \
 
-# Due to the source code layout of OpenBLAS, we need to use in-source build 
+# Due to the source code layout of OpenBLAS, we need to remove exisint `config.h` 
 # Otherwise compilation fails due to the conflict of existing `config.h` and generated `config.h`
-# (Using in-source build correctly overrides `config.h`)
 
-$CMAKE_BIN \
+rm config.h
+
+rm -rf build-android
+mkdir build-android
+
+cd build-android && $CMAKE_BIN \
   -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_ROOT/build/cmake/android.toolchain.cmake \
   -DANDROID_ARM_MODE=arm \
   -DANDROID_ARM_NEON=On \
@@ -26,4 +30,4 @@ $CMAKE_BIN \
   -DDYNAMIC_ARCH=0 \
   -DBUILD_WITHOUT_LAPACK=On \
   -DBUILD_RELAPACK=Off \
-  .
+  ..
